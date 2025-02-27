@@ -4,9 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-
 	// _ "github.com/lib/pq"
-	_ "github.com/jackc/pgx/v5"
+	// _ "github.com/jackc/pgx/v5"
 )
 
 var sqlDB *sql.DB
@@ -16,10 +15,16 @@ func TestWithDefault() {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	sqlDB, err = sql.Open("postgres", dsn)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer sqlDB.Close()
+
+	// sqlDB, err := sql.Open("mysql", "root:admin@tcp(localhost:3306)/nulltest")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer sqlDB.Close()
+	// // See "Important settings" section.
+	// sqlDB.SetConnMaxLifetime(time.Minute * 3)
+	// sqlDB.SetMaxOpenConns(10)
+	// sqlDB.SetMaxIdleConns(10)
 
 	// Check if the connection is available
 	if err = sqlDB.Ping(); err != nil {
@@ -69,10 +74,10 @@ func readUser2(id int) {
 // Create table function (if it doesn't already exist)
 func createTable() {
 	sqlStatement := `
-	CREATE TABLE IF NOT EXISTS users (
-		id SERIAL PRIMARY KEY,
-		name VARCHAR(100),
-		score NUMERIC
+	CREATE TABLE IF NOT EXISTS users1 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    score DECIMAL(10, 2)
 	);`
 	_, err := sqlDB.Exec(sqlStatement)
 	if err != nil {

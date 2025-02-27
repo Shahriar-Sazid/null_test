@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/LukaGiorgadze/gonull"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres" // fixed import line
 )
 
 // User model
@@ -27,29 +27,28 @@ const (
 	dbname   = "gsfood"
 )
 
-// func main() {
-// 	// Initialize the connection to the PostgreSQL database
-// 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-// 		host, port, user, password, dbname)
-// 	db, err = gorm.Open("postgres", dsn)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer db.Close()
-
-// 	// Migrate the schema (create the table)
-// 	db.AutoMigrate(&User{})
-
-// 	// Create a user
-// 	createUser("John Doe")
-
-// 	// Read a user by ID
-// 	readUser(1)
-// }
-
 func main() {
-	TestWithDefault()
+	// Initialize the connection to the PostgreSQL database
+	dsn := "root:admin@tcp(localhost:3306)/nulltest"
+	db, err = gorm.Open("mysql", dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// Migrate the schema (create the table)
+	db.AutoMigrate(&User{})
+
+	// Create a user
+	createUser("John Doe")
+
+	// Read a user by ID
+	readUser(1)
 }
+
+// func main() {
+// 	TestWithDefault()
+// }
 
 // Create function to insert a new user
 func createUser(name string) {
